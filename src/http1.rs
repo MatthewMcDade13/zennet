@@ -1,13 +1,10 @@
-use http::{uri::Scheme, Request, Response, Uri};
-
-use crate::conn::Conn;
+use http::{uri::Scheme, Request, Response, Uri, Version};
 
 /// String-based Http/1.x Message
 #[derive(Default, Debug, Clone)]
 pub struct HttpMessage {
     status: u32,
     version: String,
-    headers: String,
     body: String,
 }
 
@@ -29,9 +26,13 @@ pub async fn get(addr: &str) -> anyhow::Result<HttpMessage> {
     let path = uri.to_string();
     println!("URI: {}", path);
 
-    let conn = Conn::client(&path, port);
+    let conn = crate::conn::client(&path, port);
 
-    let req = Request::builder();
+    let req = Request::builder()
+        .method("GET")
+        .version(Version::HTTP_11)
+        .uri(path.clone())
+        .body(())?;
 
     Ok(HttpMessage::default())
 }

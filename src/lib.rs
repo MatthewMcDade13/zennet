@@ -5,7 +5,6 @@ use std::{
 
 pub mod conn;
 pub mod http1;
-pub mod server;
 
 pub fn read_all(stream: &mut TcpStream, mut n: u32) -> anyhow::Result<String> {
     let mut buf = vec![0u8; n as usize];
